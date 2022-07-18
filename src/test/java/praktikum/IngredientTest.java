@@ -1,43 +1,55 @@
 package praktikum;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static praktikum.IngredientType.FILLING;
+import static praktikum.IngredientType.SAUCE;
 
+
+@RunWith(Parameterized.class)
 public class IngredientTest {
 
-    @Mock
-    IngredientType ingredientType;
+    private final IngredientType ingredientType;
+    private final String name;
+    private final float price;
 
-    private Ingredient ingredient;
-    private String expectedName;
-    public float expectedPrice;
+    public IngredientTest(IngredientType ingredientType, String name, float price) {
+        this.ingredientType = ingredientType;
+        this.name = name;
+        this.price = price;
+    }
 
-    @Before
-    public void setUp(){
-        expectedName = "Коля";
-        expectedPrice = 500;
-        ingredient = new Ingredient(ingredientType, expectedName, expectedPrice);
+    @Parameterized.Parameters
+    public static Object[][] getIngredients() {
+        return new Object[][]{
+                {SAUCE, "sjhf", 500f},
+                {FILLING, "sdkfbsdkf", 700.10f}
+        };
     }
 
     @Test
-    public void getPrice() {
-        float actualPrice = ingredient.getPrice();
-        assertThat(expectedPrice, equalTo(actualPrice));
+    public void getTypeTest() {
+        Ingredient ingredient = new Ingredient(ingredientType, name, price);
+        IngredientType actualType = ingredient.getType();
+        assertEquals("Incorrect type", ingredientType, actualType);
     }
 
     @Test
-    public void getName() {
+    public void getNameTest() {
+        Ingredient ingredient = new Ingredient(ingredientType, name, price);
         String actualName = ingredient.getName();
-        assertThat(expectedName, equalTo(actualName));
+        assertEquals("Incorrect name", name, actualName);
     }
 
     @Test
-    public void getType() {
-        assertThat(ingredientType, equalTo(ingredientType));
+    public void getPriceTest() {
+        Ingredient ingredient = new Ingredient(ingredientType, name, price);
+        float actualPrice = ingredient.getPrice();
+        assertEquals("Incorrect price", price, actualPrice, 0);
     }
+
+
 }
